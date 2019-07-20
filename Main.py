@@ -34,9 +34,9 @@ user1_recommends = collaborative_filter.recommend(1,num_recommends=20)
 
 recommender = ContentBasedRecommenders()
 
-#Get recommendations for movies similar to The Dark Knight, based on movie taglines and overviews
+#Get recommendations for movies similar to Clueless, based on movie taglines and overviews
 t_recommendations = recommender.recommend_tagline('Clueless')
-#Narrow to thrillers
+#Narrow The Dark Knight to thrillers
 t_thriller_recommendations = recommender.recommend_tagline('The Dark Knight','thriller')
 
 #Get recommendations for movies similar to The Dark Knight, based on movie metadata

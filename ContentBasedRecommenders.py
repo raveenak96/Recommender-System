@@ -237,9 +237,10 @@ class ContentBasedRecommenders :
         similar_movies = metadata.loc[sim_ids]
         similar_movies.dropna(subset=['vote_average', 'vote_count'], axis=0, inplace=True)
         if genre :
-            for i,movie in similar_movies.iterrows() :
-                if genre.lower() not in movie['genres']:
-                    similar_movies.drop(labels=i,axis=0,inplace=True)
+            genres_series = similar_movies['genres']
+            genre_movies = [label for label, movie in similar_movies.iterrows() if
+                            genre.lower() in genres_series[label]]
+            similar_movies = similar_movies.loc[genre_movies, :]
             if similar_movies.empty :
                 print("Invalid genre")
                 return
@@ -267,9 +268,13 @@ class ContentBasedRecommenders :
         similar_movies = metadata.iloc[similarities_sorted, :].dropna(subset=['vote_average', 'vote_count'], axis=0)
         similar_movies.drop(index=similar_movies[similar_movies['title'] == movie_title].index, inplace=True)
         if genre :
-            for i,movie in similar_movies.iterrows() :
-                if genre.lower() not in movie['genres']:
-                    similar_movies.drop(labels=i,axis=0,inplace=True)
+            genres_series = similar_movies['genres']
+            genre_movies = [label for label, movie in similar_movies.iterrows() if
+                            genre.lower() in genres_series[label]]
+            similar_movies = similar_movies.loc[genre_movies, :]
+            if similar_movies.empty:
+                print("Invalid genre")
+                return
         C = similar_movies['vote_average'].mean()
         m = similar_movies['vote_count'].astype(int).quantile(q=0.4)
         qualified = similar_movies[similar_movies['vote_count'] >= m][0:25]
@@ -300,9 +305,13 @@ class ContentBasedRecommenders :
         rated_movie_ids = self.ratings[self.ratings['userId'] == user_id]['movieId']
         similar_movies = similar_movies[~similar_movies['id'].isin(rated_movie_ids)]
         if genre:
-            for i, movie in similar_movies.iterrows():
-                if genre.lower() not in movie['genres']:
-                    similar_movies.drop(labels=i, axis=0, inplace=True)
+            genres_series = similar_movies['genres']
+            genre_movies = [label for label, movie in similar_movies.iterrows() if
+                            genre.lower() in genres_series[label]]
+            similar_movies = similar_movies.loc[genre_movies, :]
+            if similar_movies.empty:
+                print("Invalid genre")
+                return
         similar_movies = similar_movies[0:25]
         similar_movies['est_rate'] = 0.0
         predictions = [self.svd.predict(user_id, m_id) for m_id in similar_movies['id'].values]

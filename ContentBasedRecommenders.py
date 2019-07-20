@@ -244,6 +244,7 @@ class ContentBasedRecommenders :
             if similar_movies.empty :
                 print("Invalid genre")
                 return
+        print("Generating recommendations...")
         C = similar_movies['vote_average'].mean()
         m = similar_movies['vote_count'].astype(int).quantile(q=0.4)
         qualified = similar_movies[similar_movies['vote_count'] >= m][0:25]
@@ -275,6 +276,7 @@ class ContentBasedRecommenders :
             if similar_movies.empty:
                 print("Invalid genre")
                 return
+        print("Generating recommendations...")
         C = similar_movies['vote_average'].mean()
         m = similar_movies['vote_count'].astype(int).quantile(q=0.4)
         qualified = similar_movies[similar_movies['vote_count'] >= m][0:25]
@@ -312,6 +314,7 @@ class ContentBasedRecommenders :
             if similar_movies.empty:
                 print("Invalid genre")
                 return
+        print("Generating recommendations...")
         similar_movies = similar_movies[0:25]
         similar_movies['est_rate'] = 0.0
         predictions = [self.svd.predict(user_id, m_id) for m_id in similar_movies['id'].values]

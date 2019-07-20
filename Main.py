@@ -19,12 +19,15 @@ s_rom_recommendations = simple_recommender.recommend(10,'romance')
 collaborative_filter = CollaborativeFilter()
 
 #Get 20 general recommendations for user 10
-user10_recommends = collaborative_filter.recommend(10,20)
+user10_recommends = collaborative_filter.recommend(10,num_recommends=20)
 #Narrow to romances
 user10_recommends_rom = collaborative_filter.recommend(10,'romance',20)
 
 #Get 20 general recommendations for user 1
 user1_recommends = collaborative_filter.recommend(1,num_recommends=20)
+
+#Get 20 comedy recommendations for user 1
+user1_recommends_rom = collaborative_filter.recommend(1,'comedy',num_recommends=20)
 
 # *******************************CONTENT BASED/COLLABORATIVE FILTERING RECOMMENDERS********************
 #Three recommendation systems:

@@ -66,17 +66,18 @@ class CollaborativeFilter :
         #Filter out movies the user has already rated/watched
         rated_movie_ids = self.ratings[self.ratings['userId'] == user_id]['movieId']
         qualified_movies = movies[~movies['id'].isin(rated_movie_ids)]
-        if type(genre) is not str :
-            print("Invalid genre. Genre must be string")
-            return
+
         if genre :
+            if type(genre) is not str:
+                print("Invalid genre. Genre must be string")
+                return
             for i, movie in qualified_movies.iterrows():
                 if genre.lower() not in movie['genres']:
                     qualified_movies.drop(labels=i, axis=0, inplace=True)
-        if qualified_movies.empty :
-            print("Invalid genre")
-            return
-
+            if qualified_movies.empty :
+                print("Invalid genre")
+                return
+        print("Generating recommendations...")
         predictions = [self.svd.predict(user_id, m_id) for m_id in qualified_movies['id'].values]
         qualified_movies['est_rate'] = 0.0
         qualified_movies['est_rate'] = [est for uid, iid, r_true, est, _ in predictions]

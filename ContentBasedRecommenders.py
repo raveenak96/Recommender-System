@@ -88,13 +88,18 @@ class ContentBasedRecommenders :
         descriptions = descriptions.apply(lambda x: re.sub("[^a-zA-Z]", " ", x))
         stopWords = set(stopwords.words('english'))
         stopWords.update(['film', 'films', 'story', 'stories', 'man', 'woman', 'boy', 'girl'])
+        
+        names=[]
+        for description in descriptions:
+            names = self.__extract_names(names, description)
+            
+        #### Uncomment to save names list csv #####
+        # pd.to_csv('data/names_list.csv')
+        
         #For speed sake using predefined list of names created using extract_names function
-        names_df = pd.read_csv('data/names_list.csv', usecols=['0'])
-        names = list(names_df['0'])
-
-        # for description in descriptions:
-        #    names = self.__extract_names(names, description)
-
+        #names_df = pd.read_csv('data/names_list.csv', usecols=['0'])
+        #names = list(names_df['0'])
+        
         stopWords.update(names)
 
         stemmer = SnowballStemmer('english')
